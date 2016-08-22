@@ -21,30 +21,15 @@ import java.util.Random;
 /**
  * BotStarter class
  * 
- * Magic happens here. You should edit this file, or more specifically
- * the makeTurn() method to make your bot do more than random moves.
+ * This classes creates a BotParser which communicates with the server.
  * 
- * @author Jim van Eeden <jim@starapple.nl>, Joost de Meij <joost@starapple.nl>
+ * @author Jim van Eeden <jim@starapple.nl>, Joost <joost@starapple.nl>
  */
 
 public class BotStarter {	
-    /**
-     * Makes a turn. Edit this method to make your bot smarter.
-     *
-     * @return a Move object
-     */
-    public Move makeTurn(Field field, int moveNr) {
-    	
-    	Random r = new Random();
-    	int direction = r.nextInt(4)*90; /* 0, 90, 180 or 270 degrees */
-    	Move move = new Move(direction);
-    	if (r.nextInt(5) > 0) move.setPass(true);
-    	return move;
-    }
-    
-    
+
  	public static void main(String[] args) {
- 		BotParser parser = new BotParser(new BotStarter());
+ 		BotParser parser = new BotParser();
  		parser.run();
  	}
  }

@@ -1,7 +1,5 @@
 package bot;
 
-import io.riddles.javainterface.exception.InvalidInputException;
-
 /**
  * Created by joost on 29-6-16.
  */
@@ -10,13 +8,21 @@ public class Board {
     protected int width = 20;
     protected int height = 11;
 
+    public Board() {
+        this.fields = new String[this.width][this.height];
+    }
 
     public Board(int w, int h) {
         this.width = w;
         this.height = h;
-        this.fields = new String[w][h];
+        this.fields = new String[this.width][this.height];
     }
 
+    /**
+     * Serialises the board to a String
+     * @param:
+     * @return: String
+     */
     public String toString() {
         String s = "";
         for (int y = 0; y < this.height; y++) {
@@ -27,15 +33,18 @@ public class Board {
         return s;
     }
 
-    public void initialiseFromString(String input, int w, int h) {
+    /**
+     * Parses the board from a String. Make sure width and height are set!
+     * @param: String
+     * @return:
+     */
+    public void parse(String input) {
         String[] s = input.split(",");
-        this.width = w;
-        this.height = h;
-        this.fields = new String[w][h];
+        this.fields = new String[this.width][this.height];
         int x = 0, y = 0;
         for (int i = 0; i < s.length; i++) {
             this.fields[x][y] = s[i];
-            if (++x == w) {
+            if (++x == this.width) {
                 x = 0; y++;
             }
         }
@@ -44,22 +53,44 @@ public class Board {
     public int getWidth() { return this.width; }
     public int getHeight() { return this.height; }
 
+    /**
+     * Sets the width of the board. Warning: this clears the board!
+     * @param: width
+     * @return:
+     */
+    public void setWidth(int w) {
+        this.width = w;
+        this.fields = new String[this.width][this.height];
+    }
 
+    /**
+     * Sets the height of the board. Warning: this clears the board!
+     * @param: height
+     * @return:
+     */
+    public void setHeight(int h) {
+        this.height = h;
+        this.fields = new String[this.width][this.height];
+    }
+
+    /**
+     * Returns the field at Coordinate
+     * @param: Coordinate
+     * @return: String
+     */
     public String getFieldAt(Coordinate c) {
         return fields[c.getX()][c.getY()];
     }
 
+    /**
+     * Sets the field at Coordinate
+     * @param: Coordinate, String
+     * @return:
+     */
     public void setFieldAt(Coordinate c, String s) {
         fields[c.getX()][c.getY()] = s;
     }
 
-    /* isEmpty doesn't check for players or enemies! */
-    public Boolean isEmpty(Coordinate c) {
-        if (c.getX() < 0 || c.getY() < 0 || c.getX() >= this.width || c.getY() >= this.height) {
-            return false;
-        }
-        return (!fields[c.getX()][c.getY()].equals("x"));
-    }
 
     public void dump() {
         for (int y = 0; y < this.height; y++) {
@@ -68,18 +99,5 @@ public class Board {
             }
             System.out.println();
         }
-    }
-
-
-    public int getNrAvailableFields() {
-        int availableFields = 0;
-        for (int y = 0; y < this.height; y++) {
-            for (int x = 0; x < this.width; x++) {
-                if(fields[x][y].equals(".")) {
-                    availableFields++;
-                }
-            }
-        }
-        return availableFields;
     }
 }

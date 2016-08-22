@@ -31,21 +31,19 @@ import java.util.Scanner;
 public class BotParser {
 
 	final Scanner scan;
-	final BotStarter bot;
+	final BotLogic bot;
 
-	private Field mField;
-	private int mFieldWidth = 0;
-	private int mFieldHeight = 0;
-	public static int mBotId = 0;
+	private Board mBoard;
 	public static int mRound = 0, mMove = 0;
+	private String mPlayerNames;
 
-	public BotParser(BotStarter bot) {
+	public BotParser() {
 		this.scan = new Scanner(System.in);
-		this.bot = bot;
+		bot = new BotLogic();
 	}
 
 	public void run() {
-		mField = new Field(0, 0);
+		mBoard = new Board();
 		while(scan.hasNextLine()) {
 			String line = scan.nextLine();
 
@@ -56,21 +54,25 @@ public class BotParser {
 			String[] parts = line.split(" ");
 			if(parts[0].equals("settings")) {
 				if (parts[1].equals("your_botid")) {
-					mBotId = Integer.parseInt(parts[2]);
-				} else if (parts[1].equals("field_width")) {
-					mFieldWidth = Integer.parseInt(parts[2]);
-				} else if (parts[1].equals("field_height")) {
-					mFieldHeight = Integer.parseInt(parts[2]);
+					bot.setBotId(Integer.parseInt(parts[2]));
+				} else if (parts[1].equals("board_width")) {
+					mBoard.setWidth(Integer.parseInt(parts[2]));
+				} else if (parts[1].equals("board_height")) {
+					mBoard.setHeight(Integer.parseInt(parts[2]));
+				} else if (parts[1].equals("player_names")) {
+					mPlayerNames = parts[2];
 				}
 			} else if(parts[0].equals("update") && parts[1].equals("game")) { /* new game data */
 				if (parts[2].equals("round")) {
 					mRound = Integer.parseInt(parts[3]);
 				} else if (parts[2].equals("move")) {
 					mMove = Integer.parseInt(parts[3]);
+				} else if (parts[2].equals("board")) {
+					mBoard.parse(parts[3]);
 				}
 			} else if(parts[0].equals("action")) {
 				if (parts[1].equals("move")) { /* move requested */
-					Move move = this.bot.makeTurn(mField, mBotId);
+					Move move = this.bot.makeTurn(mBoard, mMove);
 					System.out.println(move.toString());
 				}
 			} else { 

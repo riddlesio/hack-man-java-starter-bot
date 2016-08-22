@@ -27,7 +27,10 @@ package bot;
 
 public class Move {
 	int mDirection;
-	boolean mPass = false;
+	private static final int DIR_UP = 0;
+	private static final int DIR_RIGHT = 90;
+	private static final int DIR_DOWN = 180;
+	private static final int DIR_LEFT = 270;
 	
 	public Move() {
 	}
@@ -44,29 +47,22 @@ public class Move {
 		return directionToString(mDirection);
 	}
 	
-	public void setPass(boolean pass) {
-		mPass = pass;
-	}
-	
+
 	public static String directionToString(int direction) {
 		switch (direction) {
-			case Field.DIR_UP:
+			case DIR_UP:
 				return "up";
-			case Field.DIR_RIGHT:
+			case DIR_RIGHT:
 				return "right";
-			case Field.DIR_DOWN:
+			case DIR_DOWN:
 				return "down";
-			case Field.DIR_LEFT:
+			case DIR_LEFT:
 				return "left";
 		}
 		return "unknown";
 	}
 	
 	public String toString() {
-		if (mPass) {
-			return "pass";
-		} else {
-			return "turn_direction " + getDirectionString();
-		}
+		return "move " + getDirectionString();
 	}
 }
