@@ -184,22 +184,22 @@ public class Field {
     }
 
     public Point getMyPosition() {
-        return myPosition;
+        return this.myPosition;
     }
 
     public Point getOpponentPosition() {
-        return opponentPosition;
+        return this.opponentPosition;
     }
 
     public ArrayList<Point> getEnemyPositions() {
-        return enemyPositions;
+        return this.enemyPositions;
     }
 
     public ArrayList<Point> getSnippetPositions() {
-        return snippetPositions;
+        return this.snippetPositions;
     }
 
     public ArrayList<Point> getWeaponPositions() {
-        return weaponPositions;
+        return this.weaponPositions;
     }
 }

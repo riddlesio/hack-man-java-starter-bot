@@ -23,6 +23,7 @@ import java.util.Scanner;
 
 import move.Move;
 import move.MoveType;
+import player.Player;
 
 /**
  * bot.BotParser
@@ -55,13 +56,13 @@ class BotParser {
 			String[] parts = line.split(" ");
 			switch (parts[0]) {
 				case "settings":
-					this.currentState.parseSettings(parts[1], parts[2]);
+					parseSettings(parts[1], parts[2]);
 					break;
 				case "update":
 					if (parts[1].equals("game")) {
-						this.currentState.parseGameData(parts[2], parts[3]);
+						parseGameData(parts[2], parts[3]);
 					} else {
-						this.currentState.parsePlayerData(parts[1], parts[2], parts[3]);
+						parsePlayerData(parts[1], parts[2], parts[3]);
 					}
 					break;
 				case "action":
@@ -80,6 +81,118 @@ class BotParser {
 					System.out.println("unknown command");
 					break;
 			}
+		}
+	}
+
+	/**
+	 * Parses all the game settings given by the engine
+	 * @param key Type of setting given
+	 * @param value Value
+	 */
+	private void parseSettings(String key, String value) {
+		try {
+			switch(key) {
+				case "timebank":
+					int time = Integer.parseInt(value);
+					this.currentState.setMaxTimebank(time);
+					this.currentState.setTimebank(time);
+					break;
+				case "time_per_move":
+					this.currentState.setTimePerMove(Integer.parseInt(value));
+					break;
+				case "player_names":
+					String[] playerNames = value.split(",");
+					for (String playerName : playerNames)
+						this.currentState.getPlayers().put(playerName, new Player(playerName));
+					break;
+				case "your_bot":
+					this.currentState.setMyName(value);
+					break;
+				case "your_botid":
+					int myId = Integer.parseInt(value);
+					int opponentId = 2 - myId + 1;
+					this.currentState.getField().setMyId(myId);
+					this.currentState.getField().setOpponentId(opponentId);
+					break;
+				case "field_width":
+					this.currentState.getField().setWidth(Integer.parseInt(value));
+					break;
+				case "field_height":
+					this.currentState.getField().setHeight(Integer.parseInt(value));
+					break;
+				case "max_rounds":
+					this.currentState.setMaxRounds(Integer.parseInt(value));
+					break;
+				default:
+					System.err.println(String.format(
+							"Cannot parse settings input with key '%s'", key));
+			}
+		} catch (Exception e) {
+			System.err.println(String.format(
+					"Cannot parse settings value '%s' for key '%s'", value, key));
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Parse data about the game given by the engine
+	 * @param key Type of game data given
+	 * @param value Value
+	 */
+	private void parseGameData(String key, String value) {
+		try {
+			switch(key) {
+				case "round":
+					this.currentState.setRoundNumber(Integer.parseInt(value));
+					break;
+				case "field":
+					this.currentState.getField().initField();
+					this.currentState.getField().parseFromString(value);
+					break;
+				default:
+					System.err.println(String.format(
+							"Cannot parse game data input with key '%s'", key));
+			}
+		} catch (Exception e) {
+			System.err.println(String.format(
+					"Cannot parse game data value '%s' for key '%s'", value, key));
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Parse data about given player that the engine has sent
+	 * @param playerName Player name that this data is about
+	 * @param key Type of player data given
+	 * @param value Value
+	 */
+	private void parsePlayerData(String playerName, String key, String value) {
+		Player player = this.currentState.getPlayers().get(playerName);
+
+		if (player == null) {
+			System.err.println(String.format("Could not find player with name %s", playerName));
+			return;
+		}
+
+		try {
+			switch(key) {
+				case "has_weapon":
+					player.setWeapon(Boolean.parseBoolean(value));
+					break;
+				case "is_paralyzed":
+					player.setParalyzed(Boolean.parseBoolean(value));
+					break;
+				case "snippets":
+					player.setSnippets(Integer.parseInt(value));
+					break;
+				default:
+					System.err.println(String.format(
+							"Cannot parse %s data input with key '%s'", playerName, key));
+			}
+		} catch (Exception e) {
+			System.err.println(String.format(
+					"Cannot parse %s data value '%s' for key '%s'", playerName, value, key));
+			e.printStackTrace();
 		}
 	}
 }
