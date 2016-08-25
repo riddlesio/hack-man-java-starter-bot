@@ -95,7 +95,7 @@ public class Field {
 
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
-                String cell = cells[x + y];
+                String cell = cells[x + (y * this.width)];
                 this.field[x][y] = cell;
 
                 if (cell.equals(this.myId)) {
