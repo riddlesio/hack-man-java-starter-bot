@@ -98,16 +98,18 @@ public class Field {
                 String cell = cells[x + (y * this.width)];
                 this.field[x][y] = cell;
 
-                if (cell.equals(this.myId)) {
-                    this.myPosition = new Point(x, y);
-                } else if (cell.equals(this.opponentId)) {
-                    this.opponentPosition = new Point(x, y);
-                } else if (cell.equals("C")) {
-                    this.snippetPositions.add(new Point(x, y));
-                } else if (cell.equals("B")) {
-                    this.enemyPositions.add(new Point(x, y));
-                } else if (cell.equals("W")) {
-                    this.weaponPositions.add(new Point(x, y));
+                for (char c : cell.toCharArray()) {  // Multiple things can be on same position
+                    if (c == this.myId.charAt(0)) {
+                        this.myPosition = new Point(x, y);
+                    } else if (c == this.opponentId.charAt(0)) {
+                        this.opponentPosition = new Point(x, y);
+                    } else if (c == 'C') {
+                        this.snippetPositions.add(new Point(x, y));
+                    } else if (c == 'E') {
+                        this.enemyPositions.add(new Point(x, y));
+                    } else if (c == 'W') {
+                        this.weaponPositions.add(new Point(x, y));
+                    }
                 }
             }
         }
