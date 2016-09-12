@@ -38,7 +38,7 @@ public class Move {
 
     public String toString() {
         if (this.moveType != MoveType.PASS) {
-            return "move " + moveType.toString();
+            return moveType.toString();
         }
 
         return moveType.toString();
