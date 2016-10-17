@@ -164,9 +164,9 @@ public class Field {
     public boolean isPointValid(Point p) {
         int x = p.x;
         int y = p.y;
-        String cell = this.field[x][y];
 
-        return x >= 0 && x < this.width && y >= 0 && y < this.height && !cell.equals("x");
+        return x >= 0 && x < this.width && y >= 0 && y < this.height &&
+                !this.field[x][y].equals("x");
     }
 
     public void setMyId(int id) {
