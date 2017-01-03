@@ -166,7 +166,7 @@ public class Field {
         int y = p.y;
 
         return x >= 0 && x < this.width && y >= 0 && y < this.height &&
-                !this.field[x][y].equals("x");
+                !this.field[x][y].contains("x");
     }
 
     public void setMyId(int id) {
